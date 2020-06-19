@@ -387,6 +387,19 @@ class DRingCtrl(Thread):
 
         return str(self.configurationmanager.addAccount(details))
 
+    def setAccountDetails(self, accountId, details):
+        if details is None:
+            raise DRingCtrlAccountError("Must specify type, alias, hostname, \
+                                  username and password")
+
+        return str(self.configurationmanager.setAccountDetails(accountId, details))
+
+    def setCredentials(self, accountId, credentials):
+        if credentials is None:
+            raise DRingCtrlAccountError("Must specify username, realm, password")
+
+        return str(self.configurationmanager.setCredentials(accountId, credentials))
+
     def removeAccount(self, accountID=None):
         """Remove an account from internal list"""
 
