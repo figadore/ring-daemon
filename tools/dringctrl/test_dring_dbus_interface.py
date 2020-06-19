@@ -25,7 +25,7 @@ import logging
 import multiprocessing
 from sippwrap import SippWrapper
 from sippwrap import SippScreenStatParser
-from sflphonectrl import SflPhoneCtrl
+from dringctrl import DRingCtrl
 
 from nose.tools import nottest
 
@@ -89,11 +89,11 @@ class SippCtrl:
         assert(not resultParser.isAnyFailedCall())
         assert(resultParser.isAnySuccessfulCall())
 
-class TestSFLPhoneAccountConfig(SflPhoneCtrl):
+class TestSFLPhoneAccountConfig(DRingCtrl):
     """ The test suite for account configuration """
 
     def __init__(self):
-        SflPhoneCtrl.__init__(self)
+        DRingCtrl.__init__(self, "tester", False)
 
         self.logger = logging.getLogger("TestSFLPhoneAccountConfig")
         filehdlr = logging.FileHandler("/tmp/sflphonedbustest.log")
@@ -199,11 +199,11 @@ class TestSFLPhoneAccountConfig(SflPhoneCtrl):
 
 
 
-class TestSFLPhoneRegisteredCalls(SflPhoneCtrl, SippCtrl):
+class TestSFLPhoneRegisteredCalls(DRingCtrl, SippCtrl):
     """ The test suite for call interaction """
 
     def __init__(self):
-        SflPhoneCtrl.__init__(self)
+        DRingCtrl.__init__(self)
         SippCtrl.__init__(self)
 
         self.logger = logging.getLogger("TestSFLPhoneRegisteredCalls")
@@ -280,11 +280,11 @@ class TestSFLPhoneRegisteredCalls(SflPhoneCtrl, SippCtrl):
         self.parse_results()
 
 
-class TestSFLPhoneConferenceCalls(SflPhoneCtrl, SippCtrl):
+class TestSFLPhoneConferenceCalls(DRingCtrl, SippCtrl):
     """ Test Conference calls """
 
     def __init__(self):
-        SflPhoneCtrl.__init__(self)
+        DRingCtrl.__init__(self, "tester", False)
         SippCtrl.__init__(self)
 
         self.logger = logging.getLogger("TestSFLPhoneRegisteredCalls")

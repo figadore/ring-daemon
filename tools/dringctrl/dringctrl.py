@@ -78,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument('--get-call-list', help='Get call list', action='store_true')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--call', help='Call to number', metavar='<destination>')
+    group.add_argument('--conference', help='Join all active calls', action='store_true')
     #group.add_argument('--transfer', help='Transfer active call', metavar='<destination>')
 
     group = parser.add_mutually_exclusive_group()
@@ -100,6 +101,8 @@ if __name__ == "__main__":
     ctrl = DRingCtrl(sys.argv[0], args.auto_answer)
 
     if args.add_ring_account:
+        print("adding ring account")
+        print(args)
         accDetails = {'Account.type':'RING', 'Account.alias':args.add_ring_account if args.add_ring_account!='' else 'RingAccount'}
         accountID = ctrl.addAccount(accDetails)
 
@@ -179,6 +182,16 @@ if __name__ == "__main__":
 
     if args.dtmf:
         ctrl.Dtmf(args.dtmf)
+
+    if args.conference:
+        callIds = []
+        for call in ctrl.getAllCalls():
+            callIds.append(call)
+        print("joining calls " + callIds[0] + "," + callIds[1])
+        ctrl.createConference(callIds[0], callIds[1])
+        print("new calls:")
+        for call in ctrl.getAllCalls():
+            print(call)
 
     if args.test:
         DRingTester().start(ctrl, args.test)
