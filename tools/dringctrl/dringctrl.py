@@ -76,6 +76,8 @@ if __name__ == "__main__":
                         metavar='<codec list>', type=str)
 
     parser.add_argument('--get-call-list', help='Get call list', action='store_true')
+    parser.add_argument('--get-call-details', help='Get call details', metavar='<call-id>')
+    parser.add_argument('--get-conference-list', help='Get conference list', action='store_true')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--call', help='Call to number', metavar='<destination>')
     group.add_argument('--conference', help='Join all active calls', action='store_true')
@@ -163,6 +165,15 @@ if __name__ == "__main__":
     if args.get_call_list:
         for call in ctrl.getAllCalls():
             print(call)
+
+    if args.get_call_details:
+        details = ctrl.getCallDetails(args.get_call_details)
+        for k,detail in details.items():
+            print(k + ": " + detail)
+
+    if args.get_conference_list:
+        for conference in ctrl.getAllConferences():
+            print(conference)
 
     if args.call:
         ctrl.Call(args.call)
