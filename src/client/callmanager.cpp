@@ -141,6 +141,12 @@ isConferenceParticipant(const std::string& callID)
     return jami::Manager::instance().isConferenceParticipant(callID);
 }
 
+bool
+isConference(const std::string& callID)
+{
+    return jami::Manager::instance().isConference(callID);
+}
+
 void
 removeConference(const std::string& conference_id)
 {

@@ -1401,7 +1401,7 @@ Manager::joinParticipant(const std::string& callId1, const std::string& callId2)
         return false;
     }
 
-    // Set corresponding conderence details
+    // Set corresponding conference details
     auto call2 = getCallFromCallID(callId2);
     if (!call2) {
         JAMI_ERR("Could not find call %s", callId2.c_str());
@@ -2149,7 +2149,7 @@ Manager::setAudioPlugin(const std::string& audioPlugin)
 }
 
 /**
- * Set audio output device
+ * Set audio input or output device
  */
 void
 Manager::setAudioDevice(int index, DeviceType type)

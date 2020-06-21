@@ -89,7 +89,9 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--hold', help='Hold the call', metavar='<call>')
     group.add_argument('--unhold', help='Unhold the call', metavar='<call>')
+    group.add_argument('--unhold-conference', help='Unhold conference', metavar='<conference>')
 
+    parser.add_argument('--list-devices', help='List audio input and output devices', action='store_true')
     parser.add_argument('--dtmf', help='Send DTMF', metavar='<key>')
     parser.add_argument('--toggle-video', help='Launch toggle video  tests', action='store_true')
 
@@ -180,6 +182,13 @@ if __name__ == "__main__":
     if args.unhold:
         ctrl.UnHold(args.unhold)
 
+    if args.unhold_conference:
+        ctrl.UnHold(args.unhold_conference)
+
+    if args.list_devices:
+        print("devices:")
+        print(ctrl.ListDevices())
+
     if args.dtmf:
         ctrl.Dtmf(args.dtmf)
 
@@ -187,11 +196,15 @@ if __name__ == "__main__":
         callIds = []
         for call in ctrl.getAllCalls():
             callIds.append(call)
-        print("joining calls " + callIds[0] + "," + callIds[1])
-        ctrl.createConference(callIds[0], callIds[1])
-        print("new calls:")
-        for call in ctrl.getAllCalls():
-            print(call)
+        print("joining calls " + callIds[0] + ", " + callIds[1])
+        confId = ctrl.createConference(callIds[0], callIds[1])
+        print("Conference id:" + confId)
+        #print("is conference:" + confId)
+        #print(ctrl.isConference(confId))
+        #print("is conference:" + callIds[1])
+        #print(ctrl.isConference(callIds[1]))
+        #print("is conference:" + callIds[2])
+        #print(ctrl.isConference(callIds[2]))
 
     if args.test:
         DRingTester().start(ctrl, args.test)

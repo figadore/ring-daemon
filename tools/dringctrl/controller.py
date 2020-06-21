@@ -624,6 +624,31 @@ class DRingCtrl(Thread):
 
         self.callmanager.unhold(callid)
 
+    def UnholdConference(self, conference_id):
+        """Unhold a conference call identified by a ConferenceId"""
+
+        if conference_id is None or conference_id == "":
+            raise DRingCtrlError("Invalid conference_id")
+
+        return self.callmanager.unholdConference(conference_id)
+
+
+    def SetAudioOutputDevice(self, index):
+        self.configurationmanager.setAudioOutputDevice(int (index ))
+
+
+    def SetAudioInputDevice(self, index):
+        self.configurationmanager.setAudioInputDevice(int (index ))
+
+
+    def ListDevices(self):
+        outs = self.configurationmanager.getAudioOutputDeviceList()
+        ins = self.configurationmanager.getAudioInputDeviceList()
+        return {
+            "outputDevices": outs,
+            "inputDevices": ins
+        }
+
 
     def Dtmf(self, key):
         """Send a DTMF"""
@@ -642,11 +667,27 @@ class DRingCtrl(Thread):
         return callid
 
 
+    def isConference(self, callId):
+        """ Create a conference given the two call ids """
+
+        is_conference = self.callmanager.isConference(callId)
+        return is_conference
+
+
     def createConference(self, call1Id, call2Id):
         """ Create a conference given the two call ids """
 
         self.callmanager.joinParticipant(call1Id, call2Id)
+        confId = self.callmanager.getConferenceId(call1Id)
+        return confId
 
+
+#    def createConference(self, participants):
+#        """ Create a conference given the two call ids """
+#
+#        self.callmanager.createConfFromParticipantList(participants)
+#        return "x"
+#
 
     def hangupConference(self, confId):
         """ Hang up each call for this conference """
