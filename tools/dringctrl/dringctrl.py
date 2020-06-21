@@ -94,6 +94,10 @@ if __name__ == "__main__":
     group.add_argument('--unhold-conference', help='Unhold conference', metavar='<conference>')
 
     parser.add_argument('--list-devices', help='List audio input and output devices', action='store_true')
+    parser.add_argument('--set-input', help='Set active input audio device',
+                        metavar='<device-index>', type=int)
+    parser.add_argument('--set-output', help='Set active output audio device',
+                        metavar='<device-index>', type=int)
     parser.add_argument('--dtmf', help='Send DTMF', metavar='<key>')
     parser.add_argument('--toggle-video', help='Launch toggle video  tests', action='store_true')
 
@@ -199,6 +203,12 @@ if __name__ == "__main__":
     if args.list_devices:
         print("devices:")
         print(ctrl.ListDevices())
+
+    if args.set_input is not None:
+        print(ctrl.SetAudioInputDevice(args.set_input))
+
+    if args.set_output:
+        print(ctrl.SetAudioOutputDevice(args.set_output))
 
     if args.dtmf:
         ctrl.Dtmf(args.dtmf)
