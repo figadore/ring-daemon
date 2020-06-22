@@ -32,7 +32,6 @@ except Exception as e:
 
 from threading import Thread
 from random import shuffle
-from errors import *
 
 ALL_TEST_NAME = {
         'TestConfig': 'testConfig',
