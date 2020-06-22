@@ -55,7 +55,7 @@ class DRingTester():
     codecAudio = ''
     codecVideo = ''
 
-    def testConfig(self, ctrl):
+    def testConfig(self, ctrl, nbIteration, delay):
         print("**[BEGIN] test config")
         allCodecs = ctrl.getAllCodecs()
         if len(allCodecs) == 0:
