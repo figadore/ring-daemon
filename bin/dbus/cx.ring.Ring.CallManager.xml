@@ -226,6 +226,7 @@
             <tp:rationale>The signal <tp:member-ref>conferenceCreated</tp:member-ref> is emitted on success.</tp:rationale>
             </tp:docstring>
             <arg type="as" name="participants" direction="in"/>
+            <arg type="s" name="callID" direction="out"/>
         </method>
 
         <method name="isConferenceParticipant" tp:name-for-bindings="isConferenceParticipant">

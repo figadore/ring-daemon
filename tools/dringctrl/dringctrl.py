@@ -78,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument('--get-call-list', help='Get call list', action='store_true')
     parser.add_argument('--get-call-details', help='Get call details', metavar='<call-id>')
     parser.add_argument('--get-conference-list', help='Get conference list', action='store_true')
+    parser.add_argument('--get-conference-details', help='Get conference details', metavar='<conf-id>')
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--call', help='Call to number', metavar='<destination>')
     group.add_argument('--conference', help='Join all active calls', action='store_true')
@@ -168,12 +169,23 @@ if __name__ == "__main__":
 
     if args.get_call_details:
         details = ctrl.getCallDetails(args.get_call_details)
+        if details is None:
+            print("Something went wrong, is call still active?")
+            sys.exit(1)
         for k,detail in details.items():
             print(k + ": " + detail)
 
     if args.get_conference_list:
         for conference in ctrl.getAllConferences():
             print(conference)
+
+    if args.get_conference_details:
+        details = ctrl.getConferenceDetails(args.get_conference_details)
+        if details is None:
+            print("Something went wrong, is conference still active?")
+            sys.exit(1)
+        for k,detail in details.items():
+            print(k + ": " + detail)
 
     if args.call:
         ctrl.Call(args.call)

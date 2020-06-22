@@ -56,7 +56,7 @@ DRING_PUBLIC std::vector<std::string> getCallList();
 /* Conference related methods */
 DRING_PUBLIC void removeConference(const std::string& conference_id);
 DRING_PUBLIC bool joinParticipant(const std::string& sel_callID, const std::string& drag_callID);
-DRING_PUBLIC void createConfFromParticipantList(const std::vector<std::string>& participants);
+DRING_PUBLIC std::string createConfFromParticipantList(const std::vector<std::string>& participants);
 DRING_PUBLIC bool isConferenceParticipant(const std::string& call_id);
 DRING_PUBLIC bool addParticipant(const std::string& callID, const std::string& confID);
 DRING_PUBLIC bool addMainParticipant(const std::string& confID);

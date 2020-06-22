@@ -267,7 +267,6 @@ SIPAccount::newOutgoingCall(const std::string& toUrl,
     } else {
         throw VoipLinkException("Could not send outgoing INVITE request for new call");
     }
-
     return call;
 }
 

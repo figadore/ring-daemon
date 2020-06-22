@@ -129,10 +129,13 @@ joinParticipant(const std::string& sel_callID,
     return jami::Manager::instance().joinParticipant(sel_callID, drag_callID);
 }
 
-void
+std::string
 createConfFromParticipantList(const std::vector<std::string>& participants)
 {
-   jami::Manager::instance().createConfFromParticipantList(participants);
+   auto confId = jami::Manager::instance().createConfFromParticipantList(participants);
+   JAMI_DBG("bubble returning conf id: %s", confId.c_str());
+   return confId;
+
 }
 
 bool

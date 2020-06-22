@@ -156,31 +156,31 @@ class DRingCtrl(Thread):
         pass
 
     def onCallHangup_cb(self, callId):
-        pass
+        print("onCallHangup_cb")
 
     def onCallConnecting_cb(self, callId):
-        pass
+        print("onCallConnecting_cb")
 
     def onCallRinging_cb(self, callId):
-        pass
+        print("onCallRinging_cb")
 
     def onCallHold_cb(self):
-        pass
+        print("onCallHold_cb")
 
     def onCallInactive_cb(self):
-        pass
+        print("onCallInactive_cb")
 
     def onCallCurrent_cb(self):
-        pass
+        print("onCallCurrent_cb")
 
     def onCallBusy_cb(self):
-        pass
+        print("onCallBusy_cb")
 
     def onCallFailure_cb(self):
-        pass
+        print("onCallFailure_cb")
 
     def onCallOver_cb(self):
-        pass
+        print("onCallOver_cb")
 
     def onIncomingCall(self, account, callid, to):
         """ On incoming call event, add the call to the list of active calls """
@@ -195,6 +195,7 @@ class DRingCtrl(Thread):
     def onCallHangUp(self, callid, state):
         """ Remove callid from call list """
 
+        print("onCallHangUp")
         self.activeCalls[callid]['State'] = state
         self.onCallHangup_cb(callid)
         self.currentCallId = ""
@@ -202,12 +203,14 @@ class DRingCtrl(Thread):
     def onCallConnecting(self, callid, state):
         """ Update state for this call to Ringing """
 
+        print("onCallConnectin")
         self.activeCalls[callid]['State'] = state
         self.onCallConnecting_cb(callid)
 
     def onCallRinging(self, callid, state):
         """ Update state for this call to Ringing """
 
+        print("onCallRinging")
         self.activeCalls[callid]['State'] = state
         self.onCallRinging_cb(callid)
 
@@ -215,6 +218,7 @@ class DRingCtrl(Thread):
     def onCallHold(self, callid, state):
         """ Update state for this call to Hold """
 
+        print("onCallHold")
         self.activeCalls[callid]['State'] = state
         self.onCallHold_cb()
 
@@ -222,18 +226,21 @@ class DRingCtrl(Thread):
     def onCallCurrent(self, callid, state):
         """ Update state for this call to current """
 
+        print("onCallCurrent")
         self.activeCalls[callid]['State'] = state
         self.onCallCurrent_cb()
 
     def onCallInactive(self, callid, state):
         """ Update state for this call to current """
 
+        print("onCallInactive")
         self.activeCalls[callid]['State'] = state
         self.onCallInactive_cb()
 
     def onCallBusy(self, callid, state):
         """ Update state for this call to busy """
 
+        print("onCallBusy")
         self.activeCalls[callid]['State'] = state
         self.onCallBusy_cb()
 
@@ -241,12 +248,14 @@ class DRingCtrl(Thread):
     def onCallFailure(self, callid, state):
         """ Handle call failure """
 
+        print("onCallFailure")
         self.activeCalls[callid]['State'] = state
         self.onCallFailure_cb()
 
     def onCallOver(self, callid):
         """ Handle call failure """
 
+        print("onCallOver")
         self.onCallOver_cb()
         del self.activeCalls[callid]
 
@@ -288,9 +297,10 @@ class DRingCtrl(Thread):
             print("unknown state:" + str(state))
 
     def onConferenceCreated_cb(self):
-        pass
+        print("onConferenceCreated_cb")
 
     def onConferenceCreated(self, confId):
+        print("onConferenceCreated")
         self.currentConfId = confId
         self.onConferenceCreated_cb()
 
@@ -528,8 +538,12 @@ class DRingCtrl(Thread):
 
     def getCallDetails(self, callid):
         """Return informations on this call if exists"""
-
         return self.callmanager.getCallDetails(callid)
+
+    def getConferenceDetails(self, conferenceId):
+        """Return informations on this call if exists"""
+
+        return self.callmanager.getConferenceDetails(conferenceId)
 
     def printClientCallList(self):
         print("Client active call list:")
@@ -679,20 +693,20 @@ class DRingCtrl(Thread):
         return is_conference
 
 
-    def createConference(self, call1Id, call2Id):
-        """ Create a conference given the two call ids """
-
-        self.callmanager.joinParticipant(call1Id, call2Id)
-        confId = self.callmanager.getConferenceId(call1Id)
-        return confId
-
-
-#    def createConference(self, participants):
+#    def createConference(self, call1Id, call2Id):
 #        """ Create a conference given the two call ids """
 #
-#        self.callmanager.createConfFromParticipantList(participants)
-#        return "x"
-#
+#        self.callmanager.joinParticipant(call1Id, call2Id)
+#        confId = self.callmanager.getConferenceId(call1Id)
+#        return confId
+
+
+    def createConference(self, participants):
+        """ Create a conference given the two call ids """
+
+        confId = self.callmanager.createConfFromParticipantList(participants)
+        print("Got conf id from call manager:" + confId)
+
 
     def hangupConference(self, confId):
         """ Hang up each call for this conference """

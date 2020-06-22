@@ -283,7 +283,7 @@ class DRING_TESTABLE Manager {
          * Create a conference from a list of participant
          * @param A vector containing the list of participant
          */
-        void createConfFromParticipantList(const std::vector< std::string > &);
+        std::string createConfFromParticipantList(const std::vector< std::string > &);
 
         /**
          * Detach a participant from a conference, put the call on hold, do not hangup it

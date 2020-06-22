@@ -111,7 +111,7 @@ DBusCallManager::joinParticipant(const std::string& sel_callID, const std::strin
     return DRing::joinParticipant(sel_callID, drag_callID);
 }
 
-void
+std::string
 DBusCallManager::createConfFromParticipantList(const std::vector< std::string >& participants)
 {
     DRing::createConfFromParticipantList(participants);

@@ -945,16 +945,21 @@ Manager::outgoingCall(const std::string& account_id,
         JAMI_ERR("%s", e.what());
         return {};
     }
+    JAMI_WARN("TRACE H.2");
 
-    if (not call)
+    if (not call) {
+      JAMI_WARN("not call");
         return {};
+    }
 
     auto call_id = call->getCallId();
+    JAMI_WARN("call_id: %s", call_id.c_str());
 
     stopTone();
 
     pimpl_->switchCall(call);
     call->setConfId(conf_id);
+    JAMI_WARN("call_set to conf_id: %s", conf_id.c_str());
 
     return call_id;
 }
@@ -1423,40 +1428,70 @@ Manager::joinParticipant(const std::string& callId1, const std::string& callId2)
     return true;
 }
 
-void
+std::string
 Manager::createConfFromParticipantList(const std::vector< std::string > &participantList)
 {
     // we must at least have 2 participant for a conference
     if (participantList.size() <= 1) {
         JAMI_ERR("Participant number must be higher or equal to 2");
-        return;
+        return "";
     }
 
     auto conf = std::make_shared<Conference>();
+    //pimpl_->conferenceMap_[conf->getConfID()] = conf;
+    //emitSignal<DRing::CallSignal::ConferenceCreated>(conf->getConfID());
+    pimpl_->conferenceMap_.emplace(conf->getConfID(), conf);
 
     int successCounter = 0;
+    JAMI_WARN("TRACE F");
 
     for (const auto& numberaccount : participantList) {
         std::string tostr(numberaccount.substr(0, numberaccount.find(',')));
         std::string account(numberaccount.substr(numberaccount.find(',') + 1, numberaccount.size()));
 
+        JAMI_WARN("TRACE G: %s", numberaccount.c_str());
         pimpl_->unsetCurrentCall();
 
         // Create call
+        JAMI_WARN("TRACE H");
         auto call_id = outgoingCall(account, tostr, conf->getConfID());
-        if (call_id.empty())
+        if (call_id.empty()) {
+            JAMI_WARN("Call ID empty");
+            JAMI_DBG("confId: %s. call_id: %s", conf->getConfID().c_str(), call_id.c_str());
             continue;
+        } else {
+            JAMI_WARN("TRACE I");
+        }
 
+        JAMI_WARN("TRACE J");
+        //auto call = getCallFromCallID(call_id);
+        //pimpl_->bindCallToConference(*call_id, *conf);
+        JAMI_WARN("Binding %s", call_id.c_str());
+        conf->bindParticipant(call_id);
         // Manager methods may behave differently if the call id participates in a conference
-        conf->add(call_id);
+        //conf->add(call_id);
+        JAMI_DBG("Added %s to conference %s", call_id.c_str(), conf->getConfID().c_str());
+        //emitSignal<DRing::CallSignal::ConferenceChanged>(conf->getConfID(), conf->getStateStr());
         successCounter++;
+        JAMI_WARN("successCounter: %i", successCounter);
     }
+
+
+    // Switch current call id to this conference
+    pimpl_->switchCall(conf->getConfID());
+    conf->setState(Conference::State::ACTIVE_ATTACHED);
 
     // Create the conference if and only if at least 2 calls have been successfully created
     if (successCounter >= 2) {
-        pimpl_->conferenceMap_[conf->getConfID()] = conf;
-        emitSignal<DRing::CallSignal::ConferenceCreated>(conf->getConfID());
+
+        //pimpl_->conferenceMap_[conf->getConfID()] = conf;
+        pimpl_->conferenceMap_.emplace(conf->getConfID(), conf);
+        emitSignal<DRing::CallSignal::ConferenceChanged>(conf->getConfID(), conf->getStateStr());
+    } else {
+      removeConference(conf->getConfID());
     }
+    JAMI_DBG("Returning confId: %s", conf->getConfID().c_str());
+    return conf->getConfID().c_str();
 }
 
 bool
@@ -2844,6 +2879,7 @@ Manager::getConferenceDetails(const std::string& confID) const
                 {"STATE",     conf->getStateStr()},
                 {"VIDEO_SOURCE", conf->getVideoInput()},
                 {"RECORDING", conf->isRecording() ? TRUE_STR : FALSE_STR}};
+    JAMI_WARN("Conf not found");
     return {};
 }
 
@@ -3044,7 +3080,7 @@ Manager::newOutgoingCall(const std::string& toUrl,
 {
     auto account = getAccount(accountId);
     if (!account or !account->isUsable()) {
-        JAMI_WARN("Account is not usable for calling");
+        JAMI_WARN("Account %s is not usable for calling", accountId.c_str());
         return nullptr;
     }
 
