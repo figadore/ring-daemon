@@ -82,6 +82,42 @@ Done !
 More details available here:
 https://git.jami.net/savoirfairelinux/ring-project/wikis/technical/Build-instructions
 
+How to compile on Raspberry Pi 4B
+-----------------------
+
+1) Compile the dependencies first
+
+Clone opendht from github
+Build with cmake, include the  OPENDHT_PROXY_SERVER_IDENTITY=ON option
+`cmake  -DOPENDHT_PYTHON=ON -DCMAKE_INSTALL_PREFIX=/usr -DOPENDHT_PROXY_SERVER_IDENTITY=ON ..`
+
+Go to ring-daemon repo
+
+cd contrib
+mkdir native
+cd native
+../bootstrap
+sudo apt-get install libdbus-1-dev dh-autoreconf libopus-dev
+# something in here fixes `ERROR: opus not found using pkg-config` ?
+sudo apt-get install autoconf autoconf-archive automake autopoint cmake libpulse-dev libsamplerate0-dev libgsm1-dev libspeex-dev libtool libdbus-1-dev libasound2-dev libopus-dev libspeexdsp-dev libexpat1-dev libpcre3-dev libyaml-cpp-dev libboost-dev libdbus-c++-dev qttools5-dev libsndfile1-dev libsrtp-dev libupnp-dev libavcodec-dev libavformat-dev libswscale-dev libavdevice-dev libudev-dev yasm uuid-dev libgnutls28-dev libjsoncpp-dev libvdpau-dev libva-dev
+make
+
+2) Then the jamid application
+
+cd ../../
+mkdir build
+export PATH=$PATH:`pwd`/contrib/`cc -dumpmachine`/bin
+pip3 install meson ninja
+meson -Dpkg_config_path=`pwd`/contrib/`cc -dumpmachine`/lib/pkgconfig -Ddefault_library=static -Dinterfaces=dbus build
+cd build
+ninja
+sudo pip3 install meson ninja && sudo ninja install
+
+Done !
+
+More details available here:
+https://git.jami.net/savoirfairelinux/ring-project/wikis/technical/Build-instructions
+
 How to compile on Linux for Android
 -----------------------------------
 
