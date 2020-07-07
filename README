@@ -97,11 +97,11 @@ cd contrib
 mkdir native
 cd native
 ../bootstrap
-sudo apt-get -y install libdbus-1-dev dh-autoreconf libopus-dev libexpat1-dev
+sudo apt-get -y install libdbus-1-dev dh-autoreconf libopus-dev libexpat1-dev libavformat-dev
 # additional system deps
 sudo apt-get install -y git python3-pip cmake
 # something in here fixes `ERROR: opus not found using pkg-config` and others ?
-sudo apt-get install -y libavcodec-dev libspeexdsp-dev libspeex-dev libasound2-dev libopus-dev libpulse-dev libavformat-dev
+sudo apt-get install -y libavcodec-dev libspeexdsp-dev libspeex-dev libasound2-dev libopus-dev libpulse-dev 
 # possibly not needed
 #sudo apt-get install autoconf autoconf-archive automake autopoint libsamplerate0-dev libgsm1-dev libtool libdbus-1-dev    libpcre3-dev libyaml-cpp-dev libboost-dev libdbus-c++-dev qttools5-dev libsndfile1-dev libsrtp-dev libupnp-dev   libswscale-dev libavdevice-dev libudev-dev yasm uuid-dev libgnutls28-dev libjsoncpp-dev libvdpau-dev libva-dev
 make
@@ -113,7 +113,8 @@ mkdir build
 export PATH=$PATH:`pwd`/contrib/`cc -dumpmachine`/bin
 pip3 install meson ninja
 meson -Dpkg_config_path=`pwd`/contrib/`cc -dumpmachine`/lib/pkgconfig -Ddefault_library=static -Dinterfaces=dbus build
-# exit and re-enter shell, or do something else to load meson to path
+# run the following if ~/.local/bin is not in $PATH 
+export PATH=$PATH:/home/pi/.local/bin
 cd build
 ninja
 sudo pip3 install meson ninja && sudo ninja install
