@@ -97,13 +97,18 @@ cd contrib
 mkdir native
 cd native
 ../bootstrap
-sudo apt-get -y install libdbus-1-dev dh-autoreconf libopus-dev libexpat1-dev libavformat-dev
+sudo apt-get update
+sudo apt-get -y install  git python3-pip cmake libdbus-1-dev dh-autoreconf libavdevice-dev 
+# optional
+sudo apt-get install -y libpulse-dev libasound2-dev libjack-dev
+#libopus-dev libexpat1-dev libavformat-dev 
+#sudo apt-get install -y git python3-pip cmake libdbus-1-dev dh-autoreconf libavdevice-dev 
 # additional system deps
-sudo apt-get install -y git python3-pip cmake
+#sudo apt-get install -y
 # something in here fixes `ERROR: opus not found using pkg-config` and others ?
-sudo apt-get install -y libavcodec-dev libspeexdsp-dev libspeex-dev libasound2-dev libopus-dev libpulse-dev 
+#sudo apt-get install -y libavcodec-dev libspeexdsp-dev libspeex-dev libopus-dev libudev-dev
 # possibly not needed
-#sudo apt-get install autoconf autoconf-archive automake autopoint libsamplerate0-dev libgsm1-dev libtool libdbus-1-dev    libpcre3-dev libyaml-cpp-dev libboost-dev libdbus-c++-dev qttools5-dev libsndfile1-dev libsrtp-dev libupnp-dev   libswscale-dev libavdevice-dev libudev-dev yasm uuid-dev libgnutls28-dev libjsoncpp-dev libvdpau-dev libva-dev
+#sudo apt-get install autoconf autoconf-archive automake autopoint libsamplerate0-dev libgsm1-dev libtool libdbus-1-dev    libpcre3-dev libyaml-cpp-dev libboost-dev libdbus-c++-dev qttools5-dev libsndfile1-dev libsrtp-dev libupnp-dev   libswscale-dev libavdevice-dev yasm uuid-dev libgnutls28-dev libjsoncpp-dev libvdpau-dev libva-dev
 make
 
 2) Then the jamid application
